@@ -7,14 +7,16 @@ from  google_gemini_api import classify_email
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-FIVE_MINUTES = 5 * 60    
+FIVE_MINUTES = 5 * 60
+LABELS_PREFIX = "Sorty"
 
 def main():
     service = get_gmail_service()
 
     labels_ids: dict = get_user_labels(service)
     labels = labels_ids.keys()
-
+    labels = [label for label in labels if label.startswith(LABELS_PREFIX) and label != LABELS_PREFIX]
+    
     # Polls the gmail API for new emails in the last 5 minutes
     messages_ids = get_messages_in_time_window(service, str(int(time.time()) - FIVE_MINUTES), str(int(time.time()))) 
 
